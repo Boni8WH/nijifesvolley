@@ -1,21 +1,22 @@
-/* 基本スタイル */
+/* 基本スタイル (モバイルファースト) */
+/* 最初にスマホでの表示を基準にスタイルを定義します */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: #f0f8ff;
     color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 10px; /* スマホ用に余白を少し小さく */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 上から表示されるように変更 */
     min-height: 100vh;
 }
 
 .container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px; /* PCでの最大幅を少し広げる */
     background-color: #fff;
-    padding: 20px 40px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     text-align: center;
@@ -23,21 +24,21 @@ body {
 
 header h1 {
     color: #0056b3;
-    font-size: 2.5em;
+    font-size: 2em; /* スマホでの基本サイズ */
     margin-bottom: 5px;
 }
 
 .subtitle {
     color: #666;
-    font-size: 1.1em;
+    font-size: 1em;
     margin-top: 0;
 }
 
-/* 在庫表示グリッド */
+/* 在庫表示グリッド (スマホでは1列表示) */
 .status-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
+    grid-template-columns: 1fr; /* スマホでは1列に */
+    gap: 20px;
     margin-top: 30px;
 }
 
@@ -46,27 +47,51 @@ header h1 {
     border: 1px solid #dee2e6;
     border-radius: 8px;
     padding: 20px;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease-in-out;
+
+    /* ▼▼▼ アニメーション設定 ▼▼▼ */
+    opacity: 0; /* 最初は透明 */
+    transform: translateY(20px); /* 少し下に配置 */
+    /* "fadeInUp"という名前のアニメーションを0.6秒かけて実行し、最後の状態で停止 */
+    animation: fadeInUp 0.6s ease-out forwards; 
 }
 
+/* カードが順番に表示されるように、それぞれ開始時間をずらす */
+.status-item:nth-child(1) { animation-delay: 0.1s; }
+.status-item:nth-child(2) { animation-delay: 0.2s; }
+.status-item:nth-child(3) { animation-delay: 0.3s; }
+.status-item:nth-child(4) { animation-delay: 0.4s; }
+/* カードが5つ以上あっても対応できるように追記 */
+.status-item:nth-child(5) { animation-delay: 0.5s; }
+.status-item:nth-child(6) { animation-delay: 0.6s; }
+
+
 .status-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.02); /* ホバー時に少し浮き上がり、拡大する */
 }
 
 .flavor-name {
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: bold;
     margin: 0 0 10px 0;
+    min-height: 40px; /* 高さを確保してガタつきを防ぐ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ▼▼▼ 改行のバランスを調整 ▼▼▼ */
+    overflow-wrap: break-word;
+    word-break: auto-phrase; /* 文節で改行しやすくなる（ブラウザによる） */
 }
 
 .sell-count {
-    font-size: 3em;
+    font-size: 2.8em;
     font-weight: bold;
     color: #28a745;
 }
 
 .sell-count.unit {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: #555;
     margin-left: 5px;
 }
@@ -74,11 +99,48 @@ header h1 {
 /* 完売時のスタイル */
 .status-item.sold-out .sell-count {
     color: #dc3545;
-    font-size: 2.5em;
+    font-size: 2.2em;
 }
 
 footer {
     margin-top: 30px;
     color: #888;
     font-size: 0.9em;
+}
+
+/* ▼▼▼ アニメーションの定義 ▼▼▼ */
+@keyframes fadeInUp {
+    to {
+        opacity: 1; /* 透明度を1（不透明）に */
+        transform: translateY(0); /* 元の位置に戻す */
+    }
+}
+
+
+/* --- ▼▼▼ レスポンシブ設定 ▼▼▼ --- */
+
+/* タブレットサイズ (横幅が600px以上の場合) */
+@media (min-width: 600px) {
+    .status-grid {
+        /* 画面幅に合わせて列数を自動調整（最低250pxを確保） */
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    header h1 {
+        font-size: 2.5em; /* 少し大きく */
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+    }
+}
+
+/* PCサイズ (横幅が1024px以上の場合) */
+@media (min-width: 1024px) {
+    body {
+        padding: 40px; /* PCでは余白を広げる */
+    }
+    .container {
+        padding: 40px;
+    }
 }
