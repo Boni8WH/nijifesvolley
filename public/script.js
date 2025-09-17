@@ -228,3 +228,36 @@ document.addEventListener('DOMContentLoaded', async () => { // ← 非同期処�
         });
     });
 });
+
+// --- ▼▼▼ 見出し編集機能（追記） ▼▼▼ ---
+document.addEventListener('DOMContentLoaded', async () => {
+    // 要素を取得
+    const headlineInput = document.getElementById('headline-input');
+    const saveHeadlineBtn = document.getElementById('save-headline-btn');
+
+    // ページ読み込み時に現在の見出しをサーバーから取得して表示
+    try {
+        const response = await fetch('/api/headline');
+        const data = await response.json();
+        headlineInput.value = data.headline;
+    } catch (error) {
+        console.error('見出しの読み込みに失敗:', error);
+    }
+
+    // 保存ボタンのクリックイベント
+    saveHeadlineBtn.addEventListener('click', async () => {
+        const newHeadline = headlineInput.value;
+        try {
+            await fetch('/api/headline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ headline: newHeadline })
+            });
+            alert('見出しを保存しました！');
+        } catch (error) {
+            console.error('見出しの保存に失敗:', error);
+            alert('エラー：見出しの保存に失敗しました。');
+        }
+    });
+});
+// --- ▲▲▲ ここまで追記 ▲▲▲ ---

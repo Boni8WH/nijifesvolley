@@ -1,0 +1,191 @@
+/* 基本スタイル (モバイルファースト) */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+header h1 {
+    color: #0056b3;
+    font-size: clamp(2rem, 8vw, 4rem); 
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    margin-top: 0;
+}
+
+/* 在庫表示グリッド (スマホでは1列表示) */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.status-item {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards; 
+}
+
+/* カードが順番に表示されるように、それぞれ開始時間をずらす */
+.status-item:nth-child(1) { animation-delay: 0.1s; }
+.status-item:nth-child(2) { animation-delay: 0.2s; }
+.status-item:nth-child(3) { animation-delay: 0.3s; }
+.status-item:nth-child(4) { animation-delay: 0.4s; }
+.status-item:nth-child(5) { animation-delay: 0.5s; }
+.status-item:nth-child(6) { animation-delay: 0.6s; }
+
+.status-item:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+.flavor-name {
+    font-size: clamp(1.2rem, 5vw, 2rem);
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-wrap: break-word;
+    word-break: auto-phrase;
+}
+
+.sell-count {
+    font-size: clamp(3rem, 12vw, 7rem);
+    font-weight: bold;
+    color: #28a745;
+}
+
+.sell-count.unit {
+    font-size: clamp(1rem, 4vw, 2.5rem);
+    color: #555;
+    margin-left: 5px;
+}
+
+/* 完売時のスタイル */
+.status-item.sold-out .sell-count {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    color: #dc3545;
+}
+
+footer {
+    margin-top: 30px;
+    color: #888;
+    font-size: 0.9em;
+}
+
+/* --- レスポンシブ設定 (レイアウトのみ) --- */
+@media (min-width: 600px) {
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        padding: 40px;
+    }
+    .container {
+        padding: 40px;
+    }
+}
+
+/* --- アニメーションの定義 --- */
+
+/* カード登場 */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 通常時の数字のグロー (緑) */
+@keyframes subtleGlow {
+  0% { text-shadow: 0 0 0 rgba(40, 167, 69, 0); }
+  50% { text-shadow: 0 0 10px rgba(40, 167, 69, 0.8); }
+  100% { text-shadow: 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+/* 残りわずかの数字のグロー (赤) */
+@keyframes redAlertGlow {
+  0% { text-shadow: 0 0 0 rgba(214, 48, 49, 0); }
+  50% { text-shadow: 0 0 12px rgba(214, 48, 49, 0.9); }
+  100% { text-shadow: 0 0 0 rgba(214, 48, 49, 0); }
+}
+
+/* バッジのポップイン */
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.5) rotate(15deg); }
+    to { opacity: 1; transform: scale(1) rotate(15deg); }
+}
+
+
+/* --- アニメーションの適用 --- */
+
+/* 通常時（.low-stockが付いていない）の数字にだけ緑のグローを適用 */
+.status-item:not(.sold-out) .sell-count:not(.low-stock) {
+  animation-name: subtleGlow;
+  animation-duration: 2.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* 残りわずか（.low-stockが付いている）の数字にだけ赤のグローを適用 */
+.status-item:not(.sold-out) .sell-count.low-stock {
+    color: #d63031;
+    animation-name: redAlertGlow;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+/* オススメバッジのスタイル */
+.recommend-badge {
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    font-weight: bold;
+    transform: rotate(15deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+.sell-count.low-stock + .sell-count.unit {
+    color: #d63031; /* 赤色 */
+    animation-name: redAlertGlow; /* 赤く光るアニメーションを適用 */
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
