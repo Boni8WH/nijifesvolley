@@ -211,14 +211,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         addStockBtn.addEventListener('click', () => {
-            const additionalStock = parseInt(addStockInput.value);
-            if (!isNaN(additionalStock) && additionalStock > 0) {
-                cardState.currentStock += additionalStock;
-                cardState.maxStock += additionalStock;
-                addStockInput.value = '';
-                updateDisplay();
-                saveInventory(inventoryState);
-            } else { alert('有効な追加数を入力してください。'); }
+            const stockChange = parseInt(addStockInput.value);
+
+            // 入力が有効な数値（0以外）かチェック
+            if (isNaN(stockChange) || stockChange === 0) {
+                alert('0以外の有効な数値を入力してください。');
+                return;
+            }
+
+            // 在庫を減らす場合、残り在庫がマイナスにならないかチェック
+            if (cardState.currentStock + stockChange < 0) {
+                alert(`現在の在庫（${cardState.currentStock}個）以上に減らすことはできません。`);
+                return;
+            }
+
+            // 在庫数を更新（stockChangeがプラスなら増加、マイナスなら減少する）
+            cardState.currentStock += stockChange;
+            cardState.maxStock += stockChange;
+            
+            addStockInput.value = ''; // 入力欄をクリア
+            updateDisplay(); // 画面表示を更新
+            saveInventory(inventoryState); // サーバーに保存
         });
 
         updateSoldBtn.addEventListener('click', () => {
