@@ -134,17 +134,27 @@ footer {
     }
 }
 
-
-/* --- 数字を常に動かすアニメーション（追記） --- */
-@keyframes subtleBreathe {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-3px) scale(1.03); }
-  100% { transform: translateY(0) scale(1); }
+/* 1. アニメーション本体の定義 */
+/* "subtleGlow" という名前の、光るアニメーションを作成 */
+@keyframes subtleGlow {
+  0% {
+    /* 開始時：影なし */
+    text-shadow: 0 0 0 rgba(40, 167, 69, 0);
+  }
+  50% {
+    /* 中間地点：緑色の影を付けて、ぼんやり光らせる */
+    text-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
+  }
+  100% {
+    /* 終了時：影なしに戻る */
+    text-shadow: 0 0 0 rgba(40, 167, 69, 0);
+  }
 }
 
+/* 2. アニメーションを数字の要素に適用 */
 .status-item:not(.sold-out) .sell-count {
-  animation-name: subtleBreathe;
-  animation-duration: 3s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+  animation-name: subtleGlow;             /* 上で定義した光るアニメーションを適用 */
+  animation-duration: 2.5s;              /* 2.5秒かけて1サイクル */
+  animation-timing-function: ease-in-out;   /* 動きを滑らかに */
+  animation-iteration-count: infinite;     /* 無限に繰り返す */
 }
