@@ -23,14 +23,12 @@ body {
 
 header h1 {
     color: #0056b3;
-    /* ▼変更: 画面幅の8%を基準に、最小2rem, 最大4remの範囲でサイズが変わる */
     font-size: clamp(2rem, 8vw, 4rem); 
     margin-bottom: 5px;
 }
 
 .subtitle {
     color: #666;
-    /* ▼変更: 画面幅の3%を基準に、最小1rem, 最大1.5remの範囲でサイズが変わる */
     font-size: clamp(1rem, 3vw, 1.5rem);
     margin-top: 0;
 }
@@ -67,7 +65,6 @@ header h1 {
 }
 
 .flavor-name {
-    /* ▼変更: 画面幅の5%を基準に、最小1.2rem, 最大2remの範囲でサイズが変わる */
     font-size: clamp(1.2rem, 5vw, 2rem);
     font-weight: bold;
     margin: 0 0 10px 0;
@@ -80,14 +77,12 @@ header h1 {
 }
 
 .sell-count {
-    /* ▼変更: 画面幅の12%を基準に、最小3rem, 最大7remの範囲でサイズが変わる（一番大きく！）*/
     font-size: clamp(3rem, 12vw, 7rem);
     font-weight: bold;
     color: #28a745;
 }
 
 .sell-count.unit {
-    /* ▼変更: 画面幅の4%を基準に、最小1rem, 最大2.5remの範囲でサイズが変わる */
     font-size: clamp(1rem, 4vw, 2.5rem);
     color: #555;
     margin-left: 5px;
@@ -95,7 +90,6 @@ header h1 {
 
 /* 完売時のスタイル */
 .status-item.sold-out .sell-count {
-    /* ▼変更: 「完売」の文字サイズも同様に調整 */
     font-size: clamp(2.5rem, 10vw, 5rem);
     color: #dc3545;
 }
@@ -115,16 +109,12 @@ footer {
 }
 
 /* --- レスポンシブ設定 (レイアウトのみ) --- */
-/* clamp()を使ったので、ここで文字サイズを変更する必要がなくなりました */
-
-/* タブレット以上のサイズ (横幅が600px以上の場合) */
 @media (min-width: 600px) {
     .status-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* PCサイズ (横幅が1024px以上の場合) */
 @media (min-width: 1024px) {
     body {
         padding: 40px;
@@ -134,29 +124,19 @@ footer {
     }
 }
 
-/* 1. アニメーション本体の定義 */
 /* "subtleGlow" という名前の、光るアニメーションを作成 */
 @keyframes subtleGlow {
-  0% {
-    /* 開始時：影なし */
-    text-shadow: 0 0 0 rgba(40, 167, 69, 0);
-  }
-  50% {
-    /* 中間地点：緑色の影を付けて、ぼんやり光らせる */
-    text-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
-  }
-  100% {
-    /* 終了時：影なしに戻る */
-    text-shadow: 0 0 0 rgba(40, 167, 69, 0);
-  }
+  0% { text-shadow: 0 0 0 rgba(40, 167, 69, 0); }
+  50% { text-shadow: 0 0 10px rgba(40, 167, 69, 0.8); }
+  100% { text-shadow: 0 0 0 rgba(40, 167, 69, 0); }
 }
 
-/* 2. アニメーションを数字の要素に適用 */
+/* 通常時の数字のアニメーション */
 .status-item:not(.sold-out) .sell-count {
-  animation-name: subtleGlow;             /* 上で定義した光るアニメーションを適用 */
-  animation-duration: 2.5s;              /* 2.5秒かけて1サイクル */
-  animation-timing-function: ease-in-out;   /* 動きを滑らかに */
-  animation-iteration-count: infinite;     /* 無限に繰り返す */
+  animation-name: subtleGlow;
+  animation-duration: 2.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 /* オススメバッジのスタイル */
@@ -172,41 +152,29 @@ footer {
     font-weight: bold;
     transform: rotate(15deg);
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    /* ポップな登場アニメーション */
     animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
 /* ポップインアニメーションの定義 */
 @keyframes popIn {
-    from {
-        opacity: 0;
-        transform: scale(0.5) rotate(15deg);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) rotate(15deg);
-    }
-}
-
-/* 残り1桁になった数字用のスタイル */
-.sell-count.low-stock {
-    color: #d63031; /* 赤色 */
-    /* 新しい「赤く光る」アニメーションを適用 */
-    animation-name: redAlertGlow;
-    animation-duration: 1.5s; /* 少し速めの点滅で注意を引く */
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
+    from { opacity: 0; transform: scale(0.5) rotate(15deg); }
+    to { opacity: 1; transform: scale(1) rotate(15deg); }
 }
 
 /* 1桁用の、赤く光るアラートアニメーション */
 @keyframes redAlertGlow {
-  0% {
-    text-shadow: 0 0 0 rgba(214, 48, 49, 0);
-  }
-  50% {
-    text-shadow: 0 0 12px rgba(214, 48, 49, 0.9);
-  }
-  100% {
-    text-shadow: 0 0 0 rgba(214, 48, 49, 0);
-  }
+  0% { text-shadow: 0 0 0 rgba(214, 48, 49, 0); }
+  50% { text-shadow: 0 0 12px rgba(214, 48, 49, 0.9); }
+  100% { text-shadow: 0 0 0 rgba(214, 48, 49, 0); }
+}
+
+/* ▼▼▼ ここを修正しました ▼▼▼ */
+/* 残り1桁になった数字用のスタイル */
+.status-item:not(.sold-out) .sell-count.low-stock {
+    color: #d63031; /* 赤色 */
+    /* 新しい「赤く光る」アニメーションを適用 */
+    animation-name: redAlertGlow;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
 }
