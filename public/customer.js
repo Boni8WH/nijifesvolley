@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             let contentHTML = '';
 
-            // 表示モードによって内容を切り替え
             if (currentDisplayMode === 'count') {
                 // --- 残り個数表示モード ---
                 let countClasses = 'sell-count';
@@ -54,23 +53,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                     contentHTML = `<p><span class="sell-count">完売</span></p>`;
                 }
             } else {
-                // --- 販売率(%)表示モード ---
+                // --- ▼▼▼【ここからが修正箇所】▼▼▼ ---
+                // --- 販売率(%)表示モード（目標達成率の計算） ---
                 const maxStock = item.maxStock;
-                if (maxStock > 0) {
-                    const soldCount = maxStock - item.currentStock;
-                    const percentage = Math.floor((soldCount / maxStock) * 100);
+                const soldCount = maxStock - item.currentStock;
+                const salesGoal = maxStock - item.targetStock; // 販売目標数を計算
+
+                if (salesGoal > 0) {
+                    // 販売目標数が設定されている場合
+                    const percentage = Math.floor((soldCount / salesGoal) * 100);
 
                     if (percentage >= 100) {
                         itemDiv.classList.add('sold-out');
-                        contentHTML = `<p><span class="sell-count">完売</span></p>`;
+                        // 100%を超えても完売と表示
+                        contentHTML = `<p><span class="sell-count">目標達成!</span></p>`;
                     } else if (percentage >= 95) {
-                        contentHTML = `<p><span class="sell-percentage high-percentage">${percentage}%</span> 販売済み</p>`;
+                        contentHTML = `<p><span class="sell-percentage high-percentage">${percentage}%</span> 達成</p>`;
                     } else {
-                        contentHTML = `<p><span class="sell-percentage">${percentage}%</span> 販売済み</p>`;
+                        contentHTML = `<p><span class="sell-percentage">${percentage}%</span> 達成</p>`;
                     }
                 } else {
-                    contentHTML = `<p>在庫未設定</p>`; // 初期在庫が0の場合
+                    // 販売目標が0以下（未設定など）の場合
+                    contentHTML = `<p>目標未設定</p>`;
                 }
+                // --- ▲▲▲【ここまでが修正箇所】▲▲▲ ---
             }
             
             itemDiv.innerHTML = `${badgeHTML}<h2 class="flavor-name">${name}</h2>${contentHTML}`;
@@ -91,23 +97,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderInventory(); // 表示を再描画
     });
 
-
     // --- ページ初期化処理 ---
-    try {
-        // 見出しを取得
-        const headlineResponse = await fetch('/api/headline');
-        const headlineData = await headlineResponse.json();
-        headlineEl.textContent = headlineData.headline;
-        headlineEl.classList.add('scrolling');
-        
-        // 在庫データを取得
-        const inventoryResponse = await fetch('/api/inventory');
-        inventoryData = await inventoryResponse.json();
-        
-        // 初期表示
-        renderInventory();
-    } catch (error) {
-        console.error('データの取得に失敗しました:', error);
-        statusList.innerHTML = '<p>エラー: 在庫情報を取得できませんでした。時間をおいて再読み込みしてください。</p>';
-    }
+    (async () => {
+        try {
+            const headlineResponse = await fetch('/api/headline');
+            const headlineData = await headlineResponse.json();
+            headlineEl.textContent = headlineData.headline;
+            headlineEl.classList.add('scrolling');
+            
+            const inventoryResponse = await fetch('/api/inventory');
+            inventoryData = await inventoryResponse.json();
+            
+            renderInventory();
+        } catch (error) {
+            console.error('データの取得に失敗しました:', error);
+            statusList.innerHTML = '<p>エラー: 在庫情報を取得できませんでした。時間をおいて再読み込みしてください。</p>';
+        }
+    })();
 });
