@@ -172,3 +172,25 @@ footer {
   animation-timing-function: ease-in-out; /* 動きを滑らかに（開始・終了がゆっくり）*/
   animation-iteration-count: infinite;   /* 無限に繰り返す */
 }
+
+/* 在庫表示グリッド (スマホでは1列表示) */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* スマホでは常に1列 */
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* ... 他のCSS ... */
+
+/* --- ▼▼▼ ここの部分を変更 ▼▼▼ --- */
+/* タブレット以上のサイズ (横幅が600px以上の場合) */
+@media (min-width: 600px) {
+    .status-grid {
+        /* 横幅が600px以上になったら、2列に固定する */
+        /* これにより、PC画面でも常に2列で表示され、各要素の幅が広がります */
+        grid-template-columns: repeat(2, 1fr);
+    }
+    /* ... */
+}
+/* --- ▲▲▲ ここまで ▲▲▲ --- */
