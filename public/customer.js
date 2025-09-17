@@ -3,15 +3,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lastUpdatedEl = document.getElementById('last-updated');
     const headlineEl = document.getElementById('main-headline');
     const toggleBtn = document.getElementById('toggle-mode-btn');
+    
+    let currentDisplayMode = localStorage.getItem('displayMode') || 'count';
 
-    let currentDisplayMode = 'count'; // 'count' または 'percentage'
     let inventoryData = {}; // 在庫データをグローバルに保持
 
     // 表示を更新するメインの関数
     const renderInventory = () => {
         statusList.innerHTML = ''; // 古い表示をクリア
 
-        // 在庫最多のアイスを見つける
         let maxItem = { name: '', amount: -1 };
         for (const name in inventoryData) {
             const item = inventoryData[name];
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // 各カードを画面に表示
         for (const name in inventoryData) {
             const item = inventoryData[name];
             const sellableAmount = item.currentStock - item.targetStock;
@@ -53,19 +52,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     contentHTML = `<p><span class="sell-count">完売</span></p>`;
                 }
             } else {
-                // --- ▼▼▼【ここからが修正箇所】▼▼▼ ---
                 // --- 販売率(%)表示モード（目標達成率の計算） ---
                 const maxStock = item.maxStock;
                 const soldCount = maxStock - item.currentStock;
-                const salesGoal = maxStock - item.targetStock; // 販売目標数を計算
+                const salesGoal = maxStock - item.targetStock;
 
                 if (salesGoal > 0) {
-                    // 販売目標数が設定されている場合
                     const percentage = Math.floor((soldCount / salesGoal) * 100);
 
                     if (percentage >= 100) {
                         itemDiv.classList.add('sold-out');
-                        // 100%を超えても完売と表示
                         contentHTML = `<p><span class="sell-count">目標達成!</span></p>`;
                     } else if (percentage >= 95) {
                         contentHTML = `<p><span class="sell-percentage high-percentage">${percentage}%</span> 達成</p>`;
@@ -73,10 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         contentHTML = `<p><span class="sell-percentage">${percentage}%</span> 達成</p>`;
                     }
                 } else {
-                    // 販売目標が0以下（未設定など）の場合
                     contentHTML = `<p>目標未設定</p>`;
                 }
-                // --- ▲▲▲【ここまでが修正箇所】▲▲▲ ---
             }
             
             itemDiv.innerHTML = `${badgeHTML}<h2 class="flavor-name">${name}</h2>${contentHTML}`;
@@ -89,17 +83,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleBtn.addEventListener('click', () => {
         if (currentDisplayMode === 'count') {
             currentDisplayMode = 'percentage';
-            toggleBtn.textContent = '残り個数表示に切替';
         } else {
             currentDisplayMode = 'count';
-            toggleBtn.textContent = '販売率 (%) 表示に切替';
         }
-        renderInventory(); // 表示を再描画
+
+        localStorage.setItem('displayMode', currentDisplayMode);
+        // ボタンのテキストも更新
+        updateToggleButton();
+        renderInventory();
     });
 
-    // --- ページ初期化処理 ---
+    const updateToggleButton = () => {
+        if (currentDisplayMode === 'count') {
+            toggleBtn.textContent = '販売率 (%) 表示に切替';
+        } else {
+            toggleBtn.textContent = '残り個数表示に切替';
+        }
+    };
+
     (async () => {
         try {
+            updateToggleButton(); // 【追加】ページ読み込み時にボタンのテキストを正しく設定
+
             const headlineResponse = await fetch('/api/headline');
             const headlineData = await headlineResponse.json();
             headlineEl.textContent = headlineData.headline;

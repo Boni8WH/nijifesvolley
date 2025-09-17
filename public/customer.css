@@ -230,20 +230,21 @@ header h1 {
 }
 
 #toggle-mode-btn {
-    padding: 8px 16px;
+    padding: 5px;
     font-size: 0.9em;
-    font-weight: bold;
-    color: #0056b3;
+    font-weight: normal; /* 太字を解除 */
+    color: #888; /* 落ち着いた灰色に */
     background-color: transparent;
-    border: 2px solid #0056b3;
-    border-radius: 20px;
+    border: none; /* 枠線を削除 */
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    text-decoration: underline; /* テキストリンクらしく下線を追加 */
+    transition: color 0.2s;
 }
 
 #toggle-mode-btn:hover {
-    background-color: #0056b3;
-    color: white;
+    color: #0056b3; /* マウスを乗せると青色に */
+    text-decoration: none; /* マウスを乗せると下線を消す */
 }
 
 /* パーセント表示用のスタイル */
