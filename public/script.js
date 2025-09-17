@@ -29,11 +29,10 @@ async function saveInventory(data) {
 // --- ページの読み込みが完了したら、すべての処理をここから開始 ---
 document.addEventListener('DOMContentLoaded', async () => {
 
-    // --- ▼▼▼【統合 part 1】見出し編集機能の初期化 ▼▼▼ ---
+    // --- 見出し編集機能の初期化 ---
     const headlineInput = document.getElementById('headline-input');
     const saveHeadlineBtn = document.getElementById('save-headline-btn');
 
-    // ページ読み込み時に現在の見出しをサーバーから取得して表示
     try {
         const response = await fetch('/api/headline');
         const data = await response.json();
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('見出しの読み込みに失敗:', error);
     }
 
-    // 保存ボタンのクリックイベント
     saveHeadlineBtn.addEventListener('click', async () => {
         const newHeadline = headlineInput.value;
         try {
@@ -57,10 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('エラー：見出しの保存に失敗しました。');
         }
     });
-    // --- ▲▲▲ 見出し編集機能ここまで ▲▲▲ ---
 
-
-    // --- ▼▼▼【統合 part 2】在庫管理機能の初期化 ▼▼▼ ---
+    // --- 在庫管理機能の初期化 ---
     let inventoryState = {};
     inventoryState = await fetchInventory();
 
@@ -68,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     icecreamCards.forEach(card => {
         const cardName = card.dataset.name;
-        // (中略... 各カードの要素取得は元のコードと同じ)
         const stockSetupEl = card.querySelector('.stock-setup');
         const initialStockInput = card.querySelector('.initial-stock-input');
         const setStockBtn = card.querySelector('.set-stock-btn');
@@ -127,7 +122,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         sellCountEl.textContent = cardState.sellCount;
         updateDisplay();
         
-        // (中略... 各ボタンのイベントリスナーは元のコードと同じ)
         setStockBtn.addEventListener('click', () => {
             const initialValue = parseInt(initialStockInput.value);
             if (!isNaN(initialValue) && initialValue >= 0) {
@@ -153,13 +147,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else { alert('有効な目標数を入力してください。'); }
         });
 
+        // 3. 販売数を増やす (+) 【★ここを修正しました★】
         plusBtn.addEventListener('click', () => {
-            const availableToSell = cardState.currentStock - cardState.targetStock;
-            if (cardState.sellCount < availableToSell) {
+            // 上限を、目標在庫を考慮しない「現在の在庫数」に変更
+            if (cardState.sellCount < cardState.currentStock) {
                 cardState.sellCount++;
                 sellCountEl.textContent = cardState.sellCount;
             } else {
-                alert(`目標在庫（${cardState.targetStock}個）を下回るため、これ以上追加できません。`);
+                // アラートメッセージも、より分かりやすく変更
+                alert(`現在の在庫数（${cardState.currentStock}個）を超えることはできません。`);
             }
         });
 
@@ -204,6 +200,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else { alert('有効な追加数を入力してください。'); }
         });
     });
-    // --- ▲▲▲ 在庫管理機能ここまで ▲▲▲ ---
-
 });
