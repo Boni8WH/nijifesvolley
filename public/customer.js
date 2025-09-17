@@ -62,11 +62,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     if (percentage >= 100) {
                         itemDiv.classList.add('sold-out');
-                        contentHTML = `<p><span class="sell-count">目標達成!</span></p>`;
+                        contentHTML = `<p><span class="sell-count">完売！</span></p>`;
                     } else if (percentage >= 95) {
-                        contentHTML = `<p><span class="sell-percentage high-percentage">${percentage}%</span> 達成</p>`;
+                        contentHTML = `<p><span class="sell-percentage high-percentage">${percentage}%</span> 販売済</p>`;
                     } else {
-                        contentHTML = `<p><span class="sell-percentage">${percentage}%</span> 達成</p>`;
+                        contentHTML = `<p><span class="sell-percentage">${percentage}%</span> 販売済</p>`;
                     }
                 } else {
                     contentHTML = `<p>目標未設定</p>`;
