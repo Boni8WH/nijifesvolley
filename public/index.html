@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アイスクリーム在庫管理</title>
+    <title>アイス在庫管理</title>
     <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .warning-banner {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>アイスクリーム在庫管理 🍦</h1>
+            <h1>アイス在庫管理</h1>
+            
+            <div class="warning-banner">
+                サーバーに繋いでいないので、リロードしたらリセットされます。<br>
+                引き継ぎはローカルで数を伝達！
+            </div>
             <div id="rainbow-goal" class="goal-tracker">
                 <h2>🌈 レインボー完売目標</h2>
                 <p>2日目完売まで、あと <span id="rainbow-remaining">---</span> 個！</p>
