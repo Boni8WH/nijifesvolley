@@ -159,16 +159,6 @@ footer {
   animation-iteration-count: infinite;     /* 無限に繰り返す */
 }
 
-/* --- ▼▼▼ 今回追加するスタイル ▼▼▼ --- */
-
-/* 残り1桁になった数字用のスタイル */
-.sell-count.low-stock {
-    color: #d63031; /* 少し落ち着いた赤色 */
-    /* アニメーションも少し変えて注意を引く */
-    animation-name: subtlePulse;
-    animation-duration: 1.5s;
-}
-
 /* オススメバッジのスタイル */
 .recommend-badge {
     position: absolute;
@@ -198,9 +188,25 @@ footer {
     }
 }
 
-/* 1桁用のパルスアニメーション */
-@keyframes subtlePulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+/* 残り1桁になった数字用のスタイル */
+.sell-count.low-stock {
+    color: #d63031; /* 赤色 */
+    /* 新しい「赤く光る」アニメーションを適用 */
+    animation-name: redAlertGlow;
+    animation-duration: 1.5s; /* 少し速めの点滅で注意を引く */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+/* 1桁用の、赤く光るアラートアニメーション */
+@keyframes redAlertGlow {
+  0% {
+    text-shadow: 0 0 0 rgba(214, 48, 49, 0);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(214, 48, 49, 0.9);
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(214, 48, 49, 0);
+  }
 }
