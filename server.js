@@ -1,7 +1,7 @@
 // 必要な部品を読み込む
 const express = require('express');
 const path = require('path');
-const { Pool } = require('pg'); // <-- ファイル(fs)の代わりにpgを読み込む
+const { Pool } = require('pg'); // ファイル(fs)の代わりにpgを読み込む
 
 // Expressアプリを作成
 const app = express();
@@ -20,6 +20,14 @@ const pool = new Pool({
 
 // POSTデータを受け取るための設定
 app.use(express.json());
+
+// === ▼▼▼ 【今回追加した部分】/customer URLへの案内役 ▼▼▼ ===
+// /customer というURLへのアクセスがあったら customer.html を返す
+app.get('/customer', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'customer.html'));
+});
+// === ▲▲▲ ここまでが追加部分 ▲▲▲ ===
+
 // publicフォルダの中のファイルをブラウザから見えるようにする設定
 app.use(express.static('public'));
 
