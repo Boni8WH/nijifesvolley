@@ -221,3 +221,44 @@ header h1 {
         transform: translateX(-100%);
     }
 }
+
+/* --- ▼▼▼ 表示切替ボタンとパーセント表示のスタイル（追記） ▼▼▼ --- */
+
+/* 切替ボタンのスタイル */
+.mode-toggle {
+    margin-top: 20px;
+}
+
+#toggle-mode-btn {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #0056b3;
+    background-color: transparent;
+    border: 2px solid #0056b3;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#toggle-mode-btn:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* パーセント表示用のスタイル */
+.sell-percentage {
+    font-size: clamp(2.5rem, 10vw, 5rem); /* 数字より少し小さめ */
+    font-weight: bold;
+    color: #1e90ff; /* 明るい青色 */
+}
+
+/* 95%以上販売済みの場合のスタイル */
+.sell-percentage.high-percentage {
+    color: #d63031; /* 赤色 */
+    /* 既存の赤く光るアニメーションを再利用 */
+    animation-name: redAlertGlow;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
