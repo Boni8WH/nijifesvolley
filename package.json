@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Boni8WH/ice_nijiirofes2025#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   }
 }
