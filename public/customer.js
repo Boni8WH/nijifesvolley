@@ -85,3 +85,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         statusList.innerHTML = '<p>エラー: 在庫情報を取得できませんでした。時間をおいて再読み込みしてください。</p>';
     }
 });
+
+// --- ▼▼▼ ズーム機能を強制的に無効化（追記） ▼▼▼ ---
+
+// 2本指以上でのタッチ（ピンチズーム）を無効化
+document.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+// ダブルタップによるズームを無効化
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (event) => {
+    const now = (new Date()).getTime();
+    // 300ミリ秒以内に2回目のタッチがあれば、デフォルトの挙動（ズーム）を無効化
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// --- ▲▲▲ ここまで ▲▲▲ ---
