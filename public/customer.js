@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('/api/headline');
         const data = await response.json();
         headlineEl.textContent = data.headline;
+        headlineEl.classList.add('scrolling');
+        
     } catch (error) {
         console.error('見出しの取得に失敗:', error);
     }
