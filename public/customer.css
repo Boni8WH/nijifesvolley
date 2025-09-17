@@ -144,3 +144,31 @@ footer {
         padding: 40px;
     }
 }
+
+/* --- ▼▼▼ 数字を常に動かすアニメーション（追記） ▼▼▼ --- */
+
+/* 1. アニメーション本体の定義 */
+/* "subtleBreathe" という名前のアニメーションを作成します */
+@keyframes subtleBreathe {
+  0% {
+    /* 開始時：元の位置、元のサイズ */
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    /* 中間地点：少し上に移動し、ほんの少しだけ拡大 */
+    transform: translateY(-3px) scale(1.03);
+  }
+  100% {
+    /* 終了時：元の位置、元のサイズに戻る */
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 2. アニメーションを数字の要素に適用 */
+/* 「完売」ではない(.sold-outクラスが付いていない)カードの数字にだけ適用します */
+.status-item:not(.sold-out) .sell-count {
+  animation-name: subtleBreathe;         /* 上で定義したアニメーションを適用 */
+  animation-duration: 3s;                /* 3秒かけて1サイクル */
+  animation-timing-function: ease-in-out; /* 動きを滑らかに（開始・終了がゆっくり）*/
+  animation-iteration-count: infinite;   /* 無限に繰り返す */
+}
