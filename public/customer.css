@@ -181,3 +181,11 @@ footer {
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
+
+.sell-count.low-stock + .sell-count.unit {
+    color: #d63031; /* 赤色 */
+    animation-name: redAlertGlow; /* 赤く光るアニメーションを適用 */
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
