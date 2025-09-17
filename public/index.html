@@ -5,29 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>アイス在庫管理</title>
     <link rel="stylesheet" href="style.css">
-    
-    <style>
-        .warning-banner {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px 15px;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
 
     <div class="container">
         <header>
             <h1>アイス在庫管理</h1>
-            <a href="/customer" target="_blank" class="customer-link-btn">在庫ページ ↗</a>
+            <a href="/customer" target="_blank" class="customer-link-btn">お客様向けページを開く ↗</a>
             <div class="headline-editor">
                 <h3>在庫ページの見出し編集</h3>
-                <input type="text" id="headline-input" placeholder="例: 12時までに合計100個程度販売予定！">
+                <input type="text" id="headline-input" placeholder="例: 今の残り状況！">
                 <button id="save-headline-btn">見出しを保存</button>
             </div>
         </header>
@@ -37,17 +24,20 @@
                 
                 <div class="icecream-card" data-name="ストロベリーチーズケーキ">
                     <h3>ストロベリーチーズケーキ</h3>
-                    
                     <div class="stock-setup">
                         <p>初期在庫数を入力してください</p>
                         <input type="number" class="initial-stock-input" placeholder="例: 100" min="0">
                         <button class="set-stock-btn">設定</button>
                     </div>
-
                     <div class="sales-controls hidden">
                         <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="total-sold">販売済み: <span class="sold-count-display">0</span>個</p>
+                        <div class="edit-sold-section">
+                            <input type="number" class="sold-count-input" placeholder="販売数を直接入力" min="0">
+                            <button class="update-sold-btn">販売数を更新</button>
+                        </div>
+                        <hr class="divider">
                         <p class="target-status"></p>
-
                         <div class="counter">
                             <button class="minus-btn">-</button>
                             <span class="sell-count">0</span>
@@ -78,6 +68,12 @@
                     </div>
                     <div class="sales-controls hidden">
                         <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="total-sold">販売済み: <span class="sold-count-display">0</span>個</p>
+                        <div class="edit-sold-section">
+                            <input type="number" class="sold-count-input" placeholder="販売数を直接入力" min="0">
+                            <button class="update-sold-btn">販売数を更新</button>
+                        </div>
+                        <hr class="divider">
                         <p class="target-status"></p>
                         <div class="counter">
                             <button class="minus-btn">-</button>
@@ -109,6 +105,12 @@
                     </div>
                     <div class="sales-controls hidden">
                         <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="total-sold">販売済み: <span class="sold-count-display">0</span>個</p>
+                        <div class="edit-sold-section">
+                            <input type="number" class="sold-count-input" placeholder="販売数を直接入力" min="0">
+                            <button class="update-sold-btn">販売数を更新</button>
+                        </div>
+                        <hr class="divider">
                         <p class="target-status"></p>
                         <div class="counter">
                             <button class="minus-btn">-</button>
@@ -140,6 +142,12 @@
                     </div>
                     <div class="sales-controls hidden">
                         <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="total-sold">販売済み: <span class="sold-count-display">0</span>個</p>
+                        <div class="edit-sold-section">
+                            <input type="number" class="sold-count-input" placeholder="販売数を直接入力" min="0">
+                            <button class="update-sold-btn">販売数を更新</button>
+                        </div>
+                        <hr class="divider">
                         <p class="target-status"></p>
                         <div class="counter">
                             <button class="minus-btn">-</button>

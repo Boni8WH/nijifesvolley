@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- 見出し編集機能の初期化 ---
     const headlineInput = document.getElementById('headline-input');
     const saveHeadlineBtn = document.getElementById('save-headline-btn');
-
     try {
         const response = await fetch('/api/headline');
         const data = await response.json();
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('見出しの読み込みに失敗:', error);
     }
-
     saveHeadlineBtn.addEventListener('click', async () => {
         const newHeadline = headlineInput.value;
         try {
@@ -59,7 +57,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- 在庫管理機能の初期化 ---
     let inventoryState = {};
     inventoryState = await fetchInventory();
-
     const icecreamCards = document.querySelectorAll('.icecream-card');
 
     icecreamCards.forEach(card => {
@@ -79,9 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const targetStockInput = card.querySelector('.target-stock-input');
         const setTargetBtn = card.querySelector('.set-target-btn');
         const targetStatusEl = card.querySelector('.target-status');
-        
+        const soldCountDisplay = card.querySelector('.sold-count-display');
+        const soldCountInput = card.querySelector('.sold-count-input');
+        const updateSoldBtn = card.querySelector('.update-sold-btn');
+
         if (!inventoryState[cardName]) {
-            inventoryState[cardName] = { currentStock: 0, maxStock: 0, sellCount: 0, targetStock: 0, };
+            inventoryState[cardName] = { currentStock: 0, maxStock: 0, sellCount: 0, targetStock: 0 };
         }
         
         const cardState = inventoryState[cardName];
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 targetStatusEl.textContent = '';
             }
         };
-
+        
         const updateDisplay = () => {
             if (cardState.currentStock <= 0) {
                 stockEl.innerHTML = '完売 🎉';
@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 plusBtn.disabled = false;
                 confirmBtn.disabled = false;
             }
+            const soldCount = cardState.maxStock - cardState.currentStock;
+            soldCountDisplay.textContent = Math.max(0, soldCount);
             updateTargetDisplay();
         };
 
@@ -117,73 +119,125 @@ document.addEventListener('DOMContentLoaded', async () => {
         sellCountEl.textContent = cardState.sellCount;
         updateDisplay();
         
-        setStockBtn.addEventListener('click', () => { /* ... */ });
-        setTargetBtn.addEventListener('click', () => { /* ... */ });
-        confirmBtn.addEventListener('click', () => { /* ... */ });
-        correctBtn.addEventListener('click', () => { /* ... */ });
-        addStockBtn.addEventListener('click', () => { /* ... */ });
+        setStockBtn.addEventListener('click', () => {
+            const initialValue = parseInt(initialStockInput.value);
+            if (!isNaN(initialValue) && initialValue >= 0) {
+                cardState.currentStock = initialValue;
+                cardState.maxStock = initialValue;
+                updateDisplay();
+                stockSetupEl.classList.add('hidden');
+                salesControlsEl.classList.remove('hidden');
+                saveInventory(inventoryState);
+            } else { alert('有効な数値を入力してください。'); }
+        });
 
-        // --- ▼▼▼【ここから修正】+/- ボタンの長押し機能 ▼▼▼ ---
-        
+        setTargetBtn.addEventListener('click', () => {
+            const targetValue = parseInt(targetStockInput.value);
+            if (!isNaN(targetValue) && targetValue >= 0) {
+                if (targetValue > cardState.currentStock) {
+                    alert('目標在庫は現在の在庫数以下に設定してください。'); return;
+                }
+                cardState.targetStock = targetValue;
+                updateDisplay();
+                targetStockInput.value = '';
+                saveInventory(inventoryState);
+            } else { alert('有効な目標数を入力してください。'); }
+        });
+
         let intervalId = null;
         let timeoutId = null;
-
         const startCounting = (action) => {
-            action(); // まず一回実行
-            // 400ミリ秒後に、100ミリ秒間隔で連続実行を開始
+            action();
             timeoutId = setTimeout(() => {
                 intervalId = setInterval(action, 100);
             }, 400);
         };
-
         const stopCounting = () => {
             clearTimeout(timeoutId);
             clearInterval(intervalId);
         };
-
         const incrementCounter = () => {
             if (cardState.sellCount < cardState.currentStock) {
                 cardState.sellCount++;
                 sellCountEl.textContent = cardState.sellCount;
             } else {
-                stopCounting(); // 在庫上限に達したら停止
+                stopCounting();
             }
         };
-
         const decrementCounter = () => {
             if (cardState.sellCount > 0) {
                 cardState.sellCount--;
                 sellCountEl.textContent = cardState.sellCount;
             } else {
-                stopCounting(); // 0になったら停止
+                stopCounting();
             }
         };
-
-        // プラスボタンのイベント
         plusBtn.addEventListener('mousedown', () => startCounting(incrementCounter));
         plusBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // ダブルタップなどの不要な動作を抑制
+            e.preventDefault();
             startCounting(incrementCounter);
         });
-
-        // マイナスボタンのイベント
         minusBtn.addEventListener('mousedown', () => startCounting(decrementCounter));
         minusBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             startCounting(decrementCounter);
         });
-
-        // ボタンからマウスが離れたり、指が離れたりしたら連続実行を停止
         ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event => {
             plusBtn.addEventListener(event, stopCounting);
             minusBtn.addEventListener(event, stopCounting);
         });
-        
-        // --- ▲▲▲【ここまで修正】---
 
+        confirmBtn.addEventListener('click', () => {
+            if (cardState.sellCount > 0 && cardState.sellCount <= cardState.currentStock) {
+                cardState.currentStock -= cardState.sellCount;
+                cardState.sellCount = 0;
+                sellCountEl.textContent = '0';
+                updateDisplay();
+                saveInventory(inventoryState);
+            }
+        });
+        
+        correctBtn.addEventListener('click', () => {
+            if (cardState.sellCount > 0) {
+                if (cardState.currentStock + cardState.sellCount > cardState.maxStock) {
+                    alert(`総在庫数（${cardState.maxStock}個）を超える修正はできません。`); return;
+                }
+                cardState.currentStock += cardState.sellCount;
+                cardState.sellCount = 0;
+                sellCountEl.textContent = '0';
+                updateDisplay();
+                saveInventory(inventoryState);
+            }
+        });
+
+        addStockBtn.addEventListener('click', () => {
+            const additionalStock = parseInt(addStockInput.value);
+            if (!isNaN(additionalStock) && additionalStock > 0) {
+                cardState.currentStock += additionalStock;
+                cardState.maxStock += additionalStock;
+                addStockInput.value = '';
+                updateDisplay();
+                saveInventory(inventoryState);
+            } else { alert('有効な追加数を入力してください。'); }
+        });
+
+        updateSoldBtn.addEventListener('click', () => {
+            const newSoldCount = parseInt(soldCountInput.value);
+            if (isNaN(newSoldCount) || newSoldCount < 0) {
+                alert('有効な販売数を入力してください。');
+                return;
+            }
+            if (newSoldCount > cardState.maxStock) {
+                alert(`初期在庫（${cardState.maxStock}個）を超える販売数は設定できません。`);
+                return;
+            }
+            cardState.currentStock = cardState.maxStock - newSoldCount;
+            soldCountInput.value = '';
+            updateDisplay();
+            saveInventory(inventoryState);
+        });
     });
 });
-
 
 // --- ズーム機能を強制的に無効化 ---
 document.addEventListener('touchstart', (event) => {
