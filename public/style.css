@@ -220,3 +220,21 @@ button:disabled {
 .headline-editor button:hover {
     background-color: #27ae60;
 }
+
+/* --- ▼▼▼ お客様向けページへのリンクボタン（追記） ▼▼▼ --- */
+
+.customer-link-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #3498db; /* 青系のボタン */
+    color: white;
+    text-decoration: none; /* 下線を消す */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.customer-link-btn:hover {
+    background-color: #2980b9; /* マウスを乗せると少し濃い色に */
+}
