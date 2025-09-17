@@ -180,3 +180,43 @@ button:disabled {
 .sold-out .stock {
     color: #c0392b;
 }
+
+/* --- ▼▼▼ 見出し編集フォームのスタイル（追記） ▼▼▼ --- */
+
+.headline-editor {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 25px auto;
+    max-width: 500px;
+}
+
+.headline-editor h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #34495e;
+}
+
+.headline-editor input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box; /* paddingを含めて幅100%にする */
+    margin-bottom: 10px;
+}
+
+.headline-editor button {
+    width: 100%;
+    padding: 12px;
+    font-weight: bold;
+    background-color: #2ecc71; /* 「確定」ボタンと同じ緑色 */
+    color: white;
+}
+
+.headline-editor button:hover {
+    background-color: #27ae60;
+}
