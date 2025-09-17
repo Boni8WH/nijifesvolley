@@ -158,3 +158,49 @@ footer {
   animation-timing-function: ease-in-out;   /* 動きを滑らかに */
   animation-iteration-count: infinite;     /* 無限に繰り返す */
 }
+
+/* --- ▼▼▼ 今回追加するスタイル ▼▼▼ --- */
+
+/* 残り1桁になった数字用のスタイル */
+.sell-count.low-stock {
+    color: #d63031; /* 少し落ち着いた赤色 */
+    /* アニメーションも少し変えて注意を引く */
+    animation-name: subtlePulse;
+    animation-duration: 1.5s;
+}
+
+/* オススメバッジのスタイル */
+.recommend-badge {
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    font-weight: bold;
+    transform: rotate(15deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    /* ポップな登場アニメーション */
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* ポップインアニメーションの定義 */
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotate(15deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(15deg);
+    }
+}
+
+/* 1桁用のパルスアニメーション */
+@keyframes subtlePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

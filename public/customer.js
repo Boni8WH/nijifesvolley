@@ -3,34 +3,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lastUpdatedEl = document.getElementById('last-updated');
 
     try {
-        // 既存のAPIエンドポイントから全在庫データを取得
         const response = await fetch('/api/inventory');
         const inventoryData = await response.json();
 
-        // 古い表示をクリア
-        statusList.innerHTML = '';
+        // --- ▼▼▼ STEP 1: 在庫最多のアイスを見つける処理 ▼▼▼ ---
+        let maxItem = { name: '', amount: -1 };
+        const processedData = {}; // 計算後の販売数を保存する場所
 
-        // 在庫データを一つずつ処理して表示
         for (const name in inventoryData) {
             const item = inventoryData[name];
-            
-            // 「販売できる数」 = 「現在の在庫」 - 「残す目標数」
             const sellableAmount = item.currentStock - item.targetStock;
+            processedData[name] = sellableAmount; // 計算結果を保存
 
+            // 現在の最大値より大きければ、最大値を更新
+            if (sellableAmount > maxItem.amount) {
+                maxItem.amount = sellableAmount;
+                maxItem.name = name;
+            }
+        }
+        
+        // --- ▼▼▼ STEP 2: 各カードを画面に表示する処理 ▼▼▼ ---
+        statusList.innerHTML = ''; // 古い表示をクリア
+
+        for (const name in processedData) {
+            const sellableAmount = processedData[name];
+            
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('status-item');
+            itemDiv.style.position = 'relative'; // オススメバッジを配置するために必要
 
-            let countHTML;
+            // --- 「オススメ！」バッジの表示判定 ---
+            let badgeHTML = '';
+            if (
+                name === maxItem.name &&      // このアイスが在庫最多で、
+                maxItem.amount >= 10 &&       // 在庫が10個以上かつ、
+                maxItem.amount <= 99          // 99個以下の場合
+            ) {
+                badgeHTML = '<div class="recommend-badge">オススメ！</div>';
+            }
+
+            // --- 数字の表示と色分けの判定 ---
+            let countHTML = '';
+            let countClasses = 'sell-count'; // 基本のクラス
+
             if (sellableAmount > 0) {
-                // 販売できる在庫がある場合
-                countHTML = `<span class="sell-count">${sellableAmount}</span><span class="sell-count unit">個</span>`;
+                // 残り1桁（1-9個）の場合、low-stockクラスを追加
+                if (sellableAmount < 10) {
+                    countClasses += ' low-stock';
+                }
+                countHTML = `<span class="${countClasses}">${sellableAmount}</span><span class="sell-count unit">個</span>`;
             } else {
-                // 販売できる在庫がない（0以下）場合は「完売」
+                // 完売の場合
                 itemDiv.classList.add('sold-out');
                 countHTML = `<span class="sell-count">完売</span>`;
             }
 
+            // 最終的なHTMLを組み立てて挿入
             itemDiv.innerHTML = `
+                ${badgeHTML}
                 <h2 class="flavor-name">${name}</h2>
                 <p>${countHTML}</p>
             `;
