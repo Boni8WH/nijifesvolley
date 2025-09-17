@@ -189,3 +189,36 @@ footer {
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
 }
+
+/* --- ▼▼▼ 見出しのスクロールアニメーション（追記） ▼▼▼ --- */
+
+/* 見出し(h1)をアニメーションの表示領域（ビューポート）にする */
+header h1 {
+    overflow: hidden;      /* はみ出した文字を隠す */
+    white-space: nowrap;   /* 文字の折り返しを禁止する */
+    box-sizing: border-box;
+}
+
+/* スクロールさせるテキスト本体(span)のスタイル */
+#main-headline {
+    display: inline-block;  /* アニメーションのために必要 */
+    padding-left: 100%;     /* 右端からテキストを開始させる */
+    
+    /* marqueeという名前のアニメーションを適用 */
+    animation-name: marquee;
+    animation-duration: 15s;       /* 15秒かけて一周する（長い見出しでもOK） */
+    animation-timing-function: linear; /* 一定の速度で動く */
+    animation-iteration-count: infinite; /* 無限に繰り返す */
+}
+
+/* スクロールアニメーション本体の定義 */
+@keyframes marquee {
+    from {
+        /* 開始時：右端からスタート */
+        transform: translateX(0);
+    }
+    to {
+        /* 終了時：左端へ完全に消えるまで移動 */
+        transform: translateX(-100%);
+    }
+}
