@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アイスクリーム在庫管理</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>アイスクリーム在庫管理 🍦</h1>
+            <div id="rainbow-goal" class="goal-tracker">
+                <h2>🌈 レインボー完売目標</h2>
+                <p>2日目完売まで、あと <span id="rainbow-remaining">---</span> 個！</p>
+            </div>
+        </header>
+
+        <main>
+            <div id="icecream-list" class="icecream-grid">
+                
+                <div class="icecream-card" data-name="ストロベリーチーズケーキ">
+                    <h3>ストロベリーチーズケーキ</h3>
+                    
+                    <div class="stock-setup">
+                        <p>初期在庫数を入力してください</p>
+                        <input type="number" class="initial-stock-input" placeholder="例: 100" min="0">
+                        <button class="set-stock-btn">設定</button>
+                    </div>
+
+                    <div class="sales-controls hidden">
+                        <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="target-status"></p>
+
+                        <div class="counter">
+                            <button class="minus-btn">-</button>
+                            <span class="sell-count">0</span>
+                            <button class="plus-btn">+</button>
+                        </div>
+                        <div class="button-group">
+                            <button class="confirm-btn">確定</button>
+                            <button class="correct-btn">修正</button>
+                        </div>
+                        <hr class="divider">
+                        <div class="target-stock-section">
+                            <input type="number" class="target-stock-input" placeholder="残す数" min="0">
+                            <button class="set-target-btn">目標設定</button>
+                        </div>
+                        <div class="add-stock-section">
+                            <input type="number" class="add-stock-input" placeholder="追加数" min="1">
+                            <button class="add-stock-btn">在庫を追加</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="icecream-card" data-name="レインボー">
+                    <h3>レインボー</h3>
+                    <div class="stock-setup">
+                        <p>初期在庫数を入力してください</p>
+                        <input type="number" class="initial-stock-input" placeholder="例: 100" min="0">
+                        <button class="set-stock-btn">設定</button>
+                    </div>
+                    <div class="sales-controls hidden">
+                        <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="target-status"></p>
+                        <div class="counter">
+                            <button class="minus-btn">-</button>
+                            <span class="sell-count">0</span>
+                            <button class="plus-btn">+</button>
+                        </div>
+                        <div class="button-group">
+                            <button class="confirm-btn">確定</button>
+                            <button class="correct-btn">修正</button>
+                        </div>
+                        <hr class="divider">
+                        <div class="target-stock-section">
+                            <input type="number" class="target-stock-input" placeholder="残す数" min="0">
+                            <button class="set-target-btn">目標設定</button>
+                        </div>
+                        <div class="add-stock-section">
+                            <input type="number" class="add-stock-input" placeholder="追加数" min="1">
+                            <button class="add-stock-btn">在庫を追加</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="icecream-card" data-name="ハニーコットンキャンディ">
+                    <h3>ハニーコットンキャンディ</h3>
+                    <div class="stock-setup">
+                        <p>初期在庫数を入力してください</p>
+                        <input type="number" class="initial-stock-input" placeholder="例: 100" min="0">
+                        <button class="set-stock-btn">設定</button>
+                    </div>
+                    <div class="sales-controls hidden">
+                        <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="target-status"></p>
+                        <div class="counter">
+                            <button class="minus-btn">-</button>
+                            <span class="sell-count">0</span>
+                            <button class="plus-btn">+</button>
+                        </div>
+                        <div class="button-group">
+                            <button class="confirm-btn">確定</button>
+                            <button class="correct-btn">修正</button>
+                        </div>
+                        <hr class="divider">
+                        <div class="target-stock-section">
+                            <input type="number" class="target-stock-input" placeholder="残す数" min="0">
+                            <button class="set-target-btn">目標設定</button>
+                        </div>
+                        <div class="add-stock-section">
+                            <input type="number" class="add-stock-input" placeholder="追加数" min="1">
+                            <button class="add-stock-btn">在庫を追加</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="icecream-card" data-name="クッキー＆クリーム">
+                    <h3>クッキー＆クリーム</h3>
+                    <div class="stock-setup">
+                        <p>初期在庫数を入力してください</p>
+                        <input type="number" class="initial-stock-input" placeholder="例: 100" min="0">
+                        <button class="set-stock-btn">設定</button>
+                    </div>
+                    <div class="sales-controls hidden">
+                        <p class="stock">残り: <span class="stock-count">0</span>個</p>
+                        <p class="target-status"></p>
+                        <div class="counter">
+                            <button class="minus-btn">-</button>
+                            <span class="sell-count">0</span>
+                            <button class="plus-btn">+</button>
+                        </div>
+                        <div class="button-group">
+                            <button class="confirm-btn">確定</button>
+                            <button class="correct-btn">修正</button>
+                        </div>
+                        <hr class="divider">
+                        <div class="target-stock-section">
+                            <input type="number" class="target-stock-input" placeholder="残す数" min="0">
+                            <button class="set-target-btn">目標設定</button>
+                        </div>
+                        <div class="add-stock-section">
+                            <input type="number" class="add-stock-input" placeholder="追加数" min="1">
+                            <button class="add-stock-btn">在庫を追加</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
